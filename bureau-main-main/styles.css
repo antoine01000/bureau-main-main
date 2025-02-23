@@ -1,0 +1,328 @@
+/* ------------------------------------------------------------------
+   RESET & BASE
+------------------------------------------------------------------ */
+
+/* Réinitialisation de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Arrière-plan global */
+body {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* ------------------------------------------------------------------
+   CONTAINER & HEADER
+------------------------------------------------------------------ */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    color: #4a4a4a;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* ------------------------------------------------------------------
+   TASK FORM (PAGE PRINCIPALE)
+------------------------------------------------------------------ */
+
+.task-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.task-form select,
+.task-form input,
+.task-form button {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, opacity 0.3s ease;
+    background-color: white;
+    opacity: 1; /* S’assure que le bouton est toujours visible */
+}
+
+/* Personnalisation du select (chevron) */
+.task-form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    background-size: 1em;
+}
+
+.task-form select:focus,
+.task-form input:focus {
+    outline: none;
+    border-color: #6e8efb;
+}
+
+.task-form select:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------
+   BOUTONS GLOBAUX
+------------------------------------------------------------------ */
+
+/* Bouton (ex: "Ajouter") toujours visible, couleur bleue forcée */
+button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff !important; /* Couleur bleu vif forcée */
+    color: #ffffff !important;           /* Texte en blanc forcé */
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 1 !important;               /* Important pour garder le bouton visible */
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+button:hover {
+    background-color: #0069d9 !important; /* Bleu plus foncé au survol */
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* ------------------------------------------------------------------
+   LISTE & TÂCHES
+------------------------------------------------------------------ */
+
+/* En-tête + zones de filtres */
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Style de base des filtres */
+.filter-btn {
+    background-color: #f0f0f0;
+    color: #4a4a4a;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* -- Active : on peut enlever la coloration si on veut conserver
+      la couleur du data-filter. Ex ci-dessous : on ajoute un outline.
+      Vous pouvez aussi garder un style ou le commenter si pas souhaité. */
+/*
+.filter-btn.active {
+    background-color: #a777e3;
+    color: #ffffff;
+}
+*/
+
+/* Liste des tâches */
+.task-list {
+    list-style: none;
+}
+
+/* Une tâche */
+.task-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-name {
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 0.3rem;
+}
+
+.task-assignee {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.task-actions button {
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.complete-btn {
+    background-color: #4CAF50;
+}
+
+.delete-btn {
+    background-color: #ff4757;
+}
+
+.task-item.completed .task-name {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* ------------------------------------------------------------------
+   PLANIFICATION
+------------------------------------------------------------------ */
+
+.planification-container {
+    margin-top: 2rem;
+}
+
+.room-block {
+    margin-bottom: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1rem;
+    background-color: #fff;
+}
+
+.room-block h2 {
+    margin-bottom: 0.5rem;
+}
+
+.room-block ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.room-block li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.room-block select {
+    min-width: 150px;
+    margin-left: 1rem;
+}
+
+/* Sous-liste des tâches dans la gestion des pièces (page admin) */
+.sub-task-list {
+    margin: 0.5rem 0 0 1.5rem;
+    list-style: disc;
+}
+
+.sub-task-list li {
+    margin-bottom: 0.3rem;
+}
+
+/* ------------------------------------------------------------------
+   COULEURS SPÉCIFIQUES AUX BOUTONS DE FILTRE
+------------------------------------------------------------------ */
+
+/* On force avec !important pour surpasser la règle globale button { background-color: #007bff !important } */
+.filter-btn[data-filter="all"] {
+    background-color: #ccc !important;       /* Gris pour "Toutes" */
+    color: #000 !important;
+}
+.filter-btn[data-filter="à faire"] {
+    background-color: #ffa500 !important;    /* Orange pour "À faire" */
+    color: #fff !important;
+}
+.filter-btn[data-filter="en cours"] {
+    background-color: #007bff !important;    /* Bleu pour "En cours" */
+    color: #fff !important;
+}
+.filter-btn[data-filter="terminé"] {
+    background-color: #28a745 !important;    /* Vert pour "Terminées" */
+    color: #fff !important;
+}
+
+/* Survol de chaque bouton de filtre */
+.filter-btn[data-filter="all"]:hover {
+    background-color: #b3b3b3 !important;
+    color: #000 !important;
+}
+.filter-btn[data-filter="à faire"]:hover {
+    background-color: #e69500 !important;
+    color: #fff !important;
+}
+.filter-btn[data-filter="en cours"]:hover {
+    background-color: #0069d9 !important;
+    color: #fff !important;
+}
+.filter-btn[data-filter="terminé"]:hover {
+    background-color: #218838 !important;
+    color: #fff !important;
+}
+
+/* ------------------------------------------------------------------
+   RESPONSIVE
+------------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+    .task-form {
+        flex-direction: column;
+    }
+
+    .tasks-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .filter-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .task-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .task-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestion des Tâches Ménagères</title>
+  <!-- Google Font pour un look moderne -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+    .admin-btn {
+      text-decoration: none;
+      font-size: 0.9em;
+      color: #fff;
+      background: #5563de;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin: 0 5px;
+    }
+    .admin-btn:hover { background: #4450c4; }
+    .task-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .task-form select,
+    .task-form input,
+    .task-form button {
+      padding: 8px;
+      font-size: 0.9em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .task-form button {
+      background: #5563de;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .task-form button:hover { background: #4450c4; }
+    .tasks-container { margin-top: 20px; }
+    .tasks-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .tasks-header h2 { font-size: 1.2em; }
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-buttons button {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    .filter-btn[data-filter="active"] { background: #5563de; color: #fff; }
+    .filter-btn[data-filter="all"] { background: #bbb; color: #333; }
+    .filter-btn[data-filter="à faire"] { background: #ff9f43; color: #fff; }
+    .filter-btn[data-filter="en cours"] { background: #feca57; color: #333; }
+    .filter-btn[data-filter="terminé"] { background: #2ed573; color: #fff; }
+    .task-list { list-style: none; margin-top: 10px; }
+    .task-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9em;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-info span { margin-right: 10px; }
+    .task-actions button {
+      background: #ff4757;
+      border: none;
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      margin-left: 5px;
+    }
+    .task-actions button.modify-btn { background: #FFA500; }
+    .task-actions button:hover { opacity: 0.9; }
+    /* Styles pour la modale */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .modal-body {
+      display: grid;
+      gap: 10px;
+    }
+    .modal-body input,
+    .modal-body select {
+      padding: 8px;
+      font-size: 0.9em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .modal-footer button {
+      padding: 8px 16px;
+      font-size: 0.9em;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .modal-footer .save-btn {
+      background: #5563de;
+      color: #fff;
+    }
+    .modal-footer .cancel-btn {
+      background: #ccc;
+      color: #333;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Gestion des Tâches Ménagères</h1>
+      <div>
+        <a href="admin.html" class="admin-btn"><i class="fas fa-cog"></i> Gérer le système</a>
+        <a href="planification.html" class="admin-btn"><i class="fas fa-calendar"></i> Planification</a>
+      </div>
+    </header>
+
+    <div class="task-form">
+      <select id="roomSelect">
+        <option value="">Choisir une pièce...</option>
+      </select>
+      <select id="taskSuggestions" disabled>
+        <option value="">Sélectionnez d'abord une pièce...</option>
+      </select>
+      <select id="assigneeSelect">
+        <option value="">Choisir une personne...</option>
+      </select>
+      <select id="statusSelect">
+        <option value="">Choisir le statut...</option>
+        <option value="à faire">À faire</option>
+        <option value="en cours">En cours</option>
+        <option value="terminé">Terminé</option>
+      </select>
+      <select id="repetitionSelect">
+         <option value="">Choisir la répétition...</option>
+         <option value="hebdomadaire">Hebdomadaire</option>
+         <option value="mensuel">Mensuel</option>
+         <option value="3_mois">3 mois</option>
+         <option value="6_mois">6 mois</option>
+         <option value="1_an">1 an</option>
+      </select>
+      <!-- Pour saisir la date limite manuellement, on met type="date" -->
+      <input type="date" id="deadline" placeholder="Date limite">
+      <button id="addTask">Ajouter</button>
+    </div>
+
+    <div class="tasks-container">
+      <div class="tasks-header">
+        <h2>Tâches</h2>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="active">Actives</button>
+          <button class="filter-btn" data-filter="all">Toutes</button>
+          <button class="filter-btn" data-filter="à faire">À faire</button>
+          <button class="filter-btn" data-filter="en cours">En cours</button>
+          <button class="filter-btn" data-filter="terminé">Terminées</button>
+        </div>
+      </div>
+      <ul id="taskList" class="task-list"></ul>
+    </div>
+  </div>
+
+  <!-- Modal pour modifier une tâche -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Modifier la tâche</div>
+      <div class="modal-body">
+        <input type="text" id="editTaskName" placeholder="Nom de la tâche">
+        <select id="editTaskAssignee">
+          <option value="">Choisir une personne...</option>
+        </select>
+        <select id="editTaskStatus">
+          <option value="à faire">À faire</option>
+          <option value="en cours">En cours</option>
+          <option value="terminé">Terminé</option>
+        </select>
+        <select id="editTaskRepetition">
+          <option value="">Choisir la répétition...</option>
+          <option value="hebdomadaire">Hebdomadaire</option>
+          <option value="mensuel">Mensuel</option>
+          <option value="3_mois">3 mois</option>
+          <option value="6_mois">6 mois</option>
+          <option value="1_an">1 an</option>
+        </select>
+        <input type="date" id="editTaskDeadline" placeholder="Date limite">
+      </div>
+      <div class="modal-footer">
+        <button id="saveEditBtn" class="save-btn">Enregistrer</button>
+        <button id="cancelEditBtn" class="cancel-btn">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = "https://lrfbyomtntbwgvjbelnj.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyZmJ5b210bnRid2d2amJlbG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3OTk5NTQsImV4cCI6MjA1NTM3NTk1NH0.-qb3Ijvf3ET8VdFp4l05Tjikz-Q9tZdQiujrswtRXsI";
+    window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </script>
+
+  <!-- Script principal -->
+  <script src="script.js"></script>
+</body>
+</html>

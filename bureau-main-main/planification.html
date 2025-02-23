@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planification des Tâches</title>
+  
+  <!-- Ton CSS (styles.css, etc.) -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- FullCalendar (CSS, global bundle) -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Planification des Tâches</h1>
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Retour</a>
+    </header>
+
+    <!-- Conteneur existant pour afficher la liste/arborescence -->
+    <div id="planificationContainer" class="planification-container"></div>
+
+    <!-- Conteneur pour afficher le calendrier FullCalendar -->
+    <div id="calendarContainer"></div>
+  </div>
+
+  <!-- 1) CDN Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+
+  <!-- 2) Initialisation Supabase -->
+  <script>
+    const { createClient } = window.supabase;
+    const SUPABASE_URL = "https://lrfbyomtntbwgvjbelnj.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxyZmJ5b210bnRid2d2amJlbG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3OTk5NTQsImV4cCI6MjA1NTM3NTk1NH0.-qb3Ijvf3ET8VdFp4l05Tjikz-Q9tZdQiujrswtRXsI";
+    window.supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+  </script>
+
+  <!-- FullCalendar (JS, global bundle) -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.js"></script>
+
+  <!-- Script Planification -->
+  <script src="planification.js"></script>
+</body>
+</html>
